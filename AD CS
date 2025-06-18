@@ -1,0 +1,11 @@
+From Windows 
+install certipy 
+git clone https://github.com/ly4k/Certipy?ysclid=mc20q3o3t2807600738
+py -3.12 -m venv certipy-venv
+certipy-venv\Scripts\Activate.ps1
+python -m pip install --proxy=http://username:password@ip:port certipy-ad
+ceripy -h (should show version)
+Recon
+certipy find -u username -p password -dc-ip 10.10.10.10 -vulnerable -stdout
+(find Domain Controller -> Nltest /dclist:abc.orl)
+
