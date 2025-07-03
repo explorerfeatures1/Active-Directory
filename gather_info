@@ -1,0 +1,17 @@
+Bloodhound 
+https://github.com/dirkjanm/BloodHound.py (github)
+Установка
+git clone https://github.com/dirkjanm/BloodHound.py
+cd Bloodhound.py
+git checkout bloodhound-ce    (checking out the CE branch)
+pip install .
+
+
+
+install  pingcastle
+https://github.com/netwrix/pingcastle/releases/download/3.3.0.1/PingCastle_3.3.0.1.zip (скачиваем последнююверсию)
+распаковываем архив
+в powershell/cmd 
+PingCastle.exe --interactive --level Full
+выбираем режим 
+получаем html pdf файлы с отчетом
