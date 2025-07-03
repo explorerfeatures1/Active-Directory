@@ -5,8 +5,10 @@ git clone https://github.com/dirkjanm/BloodHound.py
 cd Bloodhound.py
 git checkout bloodhound-ce    (checking out the CE branch)
 pip install .
-
-
+Usage:
+bloodhound-ce-python -c All  -d 'domain.local' -u 'user' -p 'Password' -ns 10.10.10.10
+-d доменное имя и -ns ip адрес name server, за частую это контроллер домена можно ухнать введя команду nslookup в терминале
+получаем json файлы
 
 install  pingcastle
 https://github.com/netwrix/pingcastle/releases/download/3.3.0.1/PingCastle_3.3.0.1.zip (скачиваем последнююверсию)
