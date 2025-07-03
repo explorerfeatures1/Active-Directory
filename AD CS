@@ -7,5 +7,5 @@ python -m pip install --proxy=http://username:password@ip:port certipy-ad
 ceripy -h (should show version)
 Recon
 certipy find -u username -p password -dc-ip 10.10.10.10 -vulnerable -stdout
-(find Domain Controller -> Nltest /dclist:abc.orl)
+(find Domain Controller -> Nltest /dclist:abc.example)
 
