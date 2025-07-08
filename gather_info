@@ -11,9 +11,16 @@ bloodhound-ce-python -c All  -d 'domain.local' -u 'user' -p 'Password' -ns 10.10
 получаем json файлы
 
 install  pingcastle
-https://github.com/netwrix/pingcastle/releases/download/3.3.0.1/PingCastle_3.3.0.1.zip (скачиваем последнююверсию)
+https://github.com/netwrix/pingcastle/releases/download/3.3.0.1/PingCastle_3.3.0.1.zip (скачиваем последнюю версию)
 распаковываем архив
 в powershell/cmd 
 PingCastle.exe --interactive --level Full
 выбираем режим 
 получаем html pdf файлы с отчетом
+
+fping for windows (сканирование живых хостов) 
+https://github.com/dexit/fping-windows/releases
+.\fping.exe -asgq 192.168.70.0/24
+
+
+
