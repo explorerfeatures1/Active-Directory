@@ -9,3 +9,6 @@ Recon
 certipy find -u username -p password -dc-ip 10.10.10.10 -vulnerable -stdout
 (find Domain Controller -> Nltest /dclist:abc.example)
 
+Если нашло уязвимых шаблонов:
+certipy find -u 'pentest@domain.com' -p 'password' -dc-ip 'ip od DC' -text -enabled -hide-admins -stdout
+
