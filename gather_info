@@ -28,7 +28,8 @@ https://github.com/dexit/fping-windows/releases
 Get-ChildItem "HKLM:\SOFTWARE\Wow6432Node\Microsoft\Windows\CurrentVersion\Uninstall" | Get-ItemProperty | Where-Object {$_.DisplayName -ne $null} | Select-Object DisplayName, DisplayVersion, Publisher, InstallDate
 или
 wmic product get name,version,vendor
-
+Информация о RDP подключениях
+Get-WinEvent -LogName "Microsoft-Windows-TerminalServices-RemoteConnectionManager/Operational" | Format-List *    Информация о RDP подключениях 
 
 Get-ChildItem -Path "\\domain.local\sysvol\domain.local\Policies\" -Recurse -Force -ErrorAction SilentlyContinue |Where-Object { $_.Name -like "*.xml" -or $_.Name -eq "Groups.xml" }
  
