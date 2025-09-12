@@ -1,3 +1,13 @@
+ipconfig /displaydns - собирает содержимое кэша резолвера DNS-клиента;
+route print - собирает информацию о записях в локальной таблице маршрутизации;
+arp -a - собирает информацию об ARP-кэше для всех интерфейсов;
+ netstat -a -n - собирает информацию об активных сетевых соединениях
+ wmic useraccount get name,sid - собирает информацию об имени пользователя и его SID !!!!!
+set  - собирает информацию о переменных окружения;
+ netsh firewall show allowedprogram  собирает информацию о программах, которым разрешены сетевые соединения;
+netsh firewall show config инфо о конфигурации сетевого экран
+reg query HKCU\Software\Microsoft\Windows\CurrentVersion\Run информация об автозагрузке
+
 Bloodhound 
 https://github.com/dirkjanm/BloodHound.py (github)
 Установка
