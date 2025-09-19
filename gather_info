@@ -4,6 +4,7 @@ arp -a - собирает информацию об ARP-кэше для всех
  netstat -a -n - собирает информацию об активных сетевых соединениях
  wmic useraccount get name,sid - собирает информацию об имени пользователя и его SID !!!!!
 Get-LocalUser | Select-Object Name, SID
+Get-CimInstance -ClassName Win32_UserAccount | Select-Object Name, SID
 
 
 set  - собирает информацию о переменных окружения;
