@@ -54,3 +54,9 @@ Get-WmiObject win32_service | select Name,PathName,StartMode,StartName | where {
 cat users.json | jq '. data[].Properties.samaccountname' -r > users.txt
 перел брутом проверяем парольную политику, чтобы не заблокировать учетные записи !!
 nxc smb -u 'users' -p 'password' --pass-pol
+
+
+
+проверка Трастов (доверительных отношений в домене) Powershell
+([System.DirectoryServices.ActiveDirectory.Domain]::GetCurrentDomain()).GetAllTrustRelationships()
+
