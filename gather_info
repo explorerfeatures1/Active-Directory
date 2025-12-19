@@ -1,3 +1,6 @@
+https://lolbas-project.github.io/
+
+
 собираем инфо о MAC и IP адресах, маршрутизаторах
 sudo above --interface eth0 --timer 100
 # текущие учетные данные
