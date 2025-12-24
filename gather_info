@@ -1,4 +1,79 @@
 https://lolbas-project.github.io/
+https://xbz0n.sh/blog/living-off-the-land-windows   большой пост по live of the land
+
+
+собираем инфо о MAC и IP адресах, маршрутизаторах
+sudo above --interface eth0 --timer 100
+# текущие учетные данные
+cmdkey /list
+
+
+
+
+
+ipconfig /displaydns - собирает содержимое кэша резолвера DNS-клиента;
+whoami /fqdn
+nltest /dclist:domain.com    # найти контролеры домена
+route print - собирает информацию о записях в локальной таблице маршрутизации;
+arp -a - собирает информацию об ARP-кэше для всех интерфейсов;
+ netstat -a -n - собирает информацию об активных сетевых соединениях
+ wmic useraccount get name,sid - собирает информацию об имени пользователя и его SID !!!!!
+Get-LocalUser | Select-Object Name, SID
+Get-CimInstance -ClassName Win32_UserAccount | Select-Object Name, SID
+
+
+set  - собирает информацию о переменных окружения;
+ netsh firewall show allowedprogram  собирает информацию о программах, которым разрешены сетевые соединения;
+netsh firewall show config инфо о конфигурации сетевого экран
+reg query HKCU\Software\Microsoft\Windows\CurrentVersion\Run информация об автозагрузке
+
+Bloodhound 
+https://github.com/dirkjanm/BloodHound.py (github)
+Установка
+git clone https://github.com/dirkjanm/BloodHound.py
+cd Bloodhound.py
+git checkout bloodhound-ce    (checking out the CE branch)
+pip install .
+Usage:
+bloodhound-ce-python -c All  -d 'domain.local' -u 'user' -p 'Password' -ns 10.10.10.10
+-d доменное имя и -ns ip адрес name server, за частую это контроллер домена можно ухнать введя команду nslookup в терминале
+получаем json файлы
+
+install  pingcastle
+https://github.com/netwrix/pingcastle/releases/download/3.3.0.1/PingCastle_3.3.0.1.zip (скачиваем последнюю версию)
+распаковываем архив
+в powershell/cmd 
+PingCastle.exe --interactive --level Full
+выбираем режим 
+получаем html pdf файлы с отчетом
+
+fping for windows (сканирование живых хостов) 
+https://github.com/dexit/fping-windows/releases
+.\fping.exe -asgq 192.168.70.0/24
+
+
+
+Програмное обеспечение и версии на хосте
+Get-ChildItem "HKLM:\SOFTWARE\Wow6432Node\Microsoft\Windows\CurrentVersion\Uninstall" | Get-ItemProperty | Where-Object {$_.DisplayName -ne $null} | Select-Object DisplayName, DisplayVersion, Publisher, InstallDate
+или
+wmic product get name,version,vendor
+Информация о RDP подключениях
+Get-WinEvent -LogName "Microsoft-Windows-TerminalServices-RemoteConnectionManager/Operational" | Format-List *    Информация о RDP подключениях 
+
+Get-ChildItem -Path "\\domain.local\sysvol\domain.local\Policies\" -Recurse -Force -ErrorAction SilentlyContinue |Where-Object { $_.Name -like "*.xml" -or $_.Name -eq "Groups.xml" }
+A quick and easy way to find services with unquoted service paths is to open up PowerShell and run the following:
+Get-WmiObject win32_service | select Name,PathName,StartMode,StartName | where {$_.StartMode -ne "Disabled" -and $_.StartName -eq "LocalSystem" -and $_.PathName}
+
+
+Сбор пользователей после использования bloodhound
+cat users.json | jq '. data[].Properties.samaccountname' -r > users.txt
+перел брутом проверяем парольную политику, чтобы не заблокировать учетные записи !!
+nxc smb -u 'users' -p 'password' --pass-pol
+
+
+
+проверка Трастов (доверительных отношений в домене) Powershell
+([System.DirectoryServices.ActiveDirectory.Domain]::GetCurrentDomain()).GetAllTrustRelationships()
 
 
 собираем инфо о MAC и IP адресах, маршрутизаторах
