@@ -8,7 +8,9 @@ sudo above --interface eth0 --timer 100
 cmdkey /list
 
 
-
+spn
+Add-Type -AssemblyName System.IdentityModel
+New-Object System.IdentityModel.Tokens.KerberosRequestorSecurityToken -ArgumentList "HOST/portalcyberwarfare.corp"
 
 
 ipconfig /displaydns - собирает содержимое кэша резолвера DNS-клиента;
