@@ -1,3 +1,43 @@
+$sysvolPath = "\\$env:USERDNSDOMAIN\SYSVOL\$env:USERDNSDOMAIN"
+
+# 1. Search for all XML files (GPP settings)
+Write-Output "=== GPP XML Files ==="
+Get-ChildItem -Path "$sysvolPath\Policies" -Recurse -Include *.xml -ErrorAction SilentlyContinue |
+    ForEach-Object { $_.FullName }
+
+# 2. Search for scripts
+Write-Output "`n=== Scripts ==="
+Get-ChildItem -Path $sysvolPath -Recurse -Include *.ps1,*.bat,*.cmd,*.vbs,*.wsf -ErrorAction SilentlyContinue |
+    ForEach-Object { $_.FullName }
+
+# 3. Search for configuration files
+Write-Output "`n=== Config Files ==="
+Get-ChildItem -Path $sysvolPath -Recurse -Include *.ini,*.inf,*.cfg,*.config -ErrorAction SilentlyContinue |
+    ForEach-Object { $_.FullName }
+
+# 4. Search for certificate/key files
+Write-Output "`n=== Certificate/Key Files ==="
+Get-ChildItem -Path $sysvolPath -Recurse -Include *.pfx,*.p12,*.pem,*.cer,*.key -ErrorAction SilentlyContinue |
+    ForEach-Object { $_.FullName }
+
+# 5. Search file contents for credentials
+Write-Output "`n=== Files Containing Credential Keywords ==="
+$keywords = @("password","passwd","pwd","credential","secret","cpassword","connectionstring")
+Get-ChildItem -Path $sysvolPath -Recurse -Include *.xml,*.ps1,*.bat,*.cmd,*.vbs,*.ini,*.inf,*.txt -ErrorAction SilentlyContinue |
+    ForEach-Object {
+        $file = $_
+        $content = Get-Content $file.FullName -ErrorAction SilentlyContinue
+        foreach ($keyword in $keywords) {
+            $matches = $content | Select-String -Pattern $keyword -SimpleMatch
+            if ($matches) {
+                Write-Output "  $($file.FullName): Found '$keyword'"
+                $matches | ForEach-Object { Write-Output "    Line $($_.LineNumber): $($_.Line.Trim())" }
+            }
+        }
+    }
+
+
+
 https://lolbas-project.github.io/
 https://xbz0n.sh/blog/living-off-the-land-windows   большой пост по live of the land
 
