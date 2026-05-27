@@ -200,6 +200,7 @@ for i in {1..254}; do echo -n "10.5.2.$i "; dig +short -x 10.5.2.$i; done >
 /tmp/ptrs.txt
 
 #сбор пользователей (обращение к контролеру домена)
+kerbrute userenum --dc 10.5.2.2 -d domain.ru /usr/share/seclists/Usernames/xato-net-10-million-usernames.txt
 ldapsearch -x -H ldap://10.5.2.2 -b 'DC=TELECORE,DC=AD' 'objectClass=user'
 или nxc ldap 10.5.2.2 --users | awk '{print $5}' > users.txt
 
