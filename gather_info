@@ -108,6 +108,9 @@ Get-ChildItem -Path "\\domain.local\sysvol\domain.local\Policies\" -Recurse -For
 A quick and easy way to find services with unquoted service paths is to open up PowerShell and run the following:
 Get-WmiObject win32_service | select Name,PathName,StartMode,StartName | where {$_.StartMode -ne "Disabled" -and $_.StartName -eq "LocalSystem" -and $_.PathName}
 
+# сбор пользователей в домене с Описанием 
+Get-WmiObject -Class Win32_UserAccount -Filter "Domain='Domain.local' AND Disabled='False'" | Select Name, Domain, Status, LocalAccount, AccountType, Lockout, PasswordRequired,PasswordChangeable, Description, SID
+
 
 Сбор пользователей после использования bloodhound
 cat users.json | jq '. data[].Properties.samaccountname' -r > users.txt
