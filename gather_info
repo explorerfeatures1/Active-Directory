@@ -100,7 +100,9 @@ Get-ChildItem "HKLM:\SOFTWARE\Wow6432Node\Microsoft\Windows\CurrentVersion\Unins
 или
 wmic product get name,version,vendor
 Информация о RDP подключениях
-Get-WinEvent -LogName "Microsoft-Windows-TerminalServices-RemoteConnectionManager/Operational" | Format-List *    Информация о RDP подключениях 
+Get-WinEvent -LogName "Microsoft-Windows-TerminalServices-RemoteConnectionManager/Operational" | Format-List *    Информация о RDP подключениях
+Get-ChildItem -Path "$env:USERPROFILE" -Recurse -Filter *.rdp -ErrorAction SilentlyContinue поиск rdp файлов на системе
+
 
 Get-ChildItem -Path "\\domain.local\sysvol\domain.local\Policies\" -Recurse -Force -ErrorAction SilentlyContinue |Where-Object { $_.Name -like "*.xml" -or $_.Name -eq "Groups.xml" }
 A quick and easy way to find services with unquoted service paths is to open up PowerShell and run the following:
@@ -169,16 +171,6 @@ https://github.com/dexit/fping-windows/releases
 
 
 
-Програмное обеспечение и версии на хосте
-Get-ChildItem "HKLM:\SOFTWARE\Wow6432Node\Microsoft\Windows\CurrentVersion\Uninstall" | Get-ItemProperty | Where-Object {$_.DisplayName -ne $null} | Select-Object DisplayName, DisplayVersion, Publisher, InstallDate
-или
-wmic product get name,version,vendor
-Информация о RDP подключениях
-Get-WinEvent -LogName "Microsoft-Windows-TerminalServices-RemoteConnectionManager/Operational" | Format-List *    Информация о RDP подключениях 
-
-Get-ChildItem -Path "\\domain.local\sysvol\domain.local\Policies\" -Recurse -Force -ErrorAction SilentlyContinue |Where-Object { $_.Name -like "*.xml" -or $_.Name -eq "Groups.xml" }
-A quick and easy way to find services with unquoted service paths is to open up PowerShell and run the following:
-Get-WmiObject win32_service | select Name,PathName,StartMode,StartName | where {$_.StartMode -ne "Disabled" -and $_.StartName -eq "LocalSystem" -and $_.PathName}
 
 
 Сбор пользователей после использования bloodhound
