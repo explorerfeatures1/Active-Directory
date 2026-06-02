@@ -193,6 +193,7 @@ nxc smb -u 'users' -p 'password' --pass-pol
 nameserver ip
 for i in {1..254}; do echo -n "10.5.2.$i "; dig +short -x 10.5.2.$i; done >
 /tmp/ptrs.txt
+for ((i=1;i<255;i++)) do dig @ns01.company.ru -x "external_ip.$i" | grep -P "^\d+.*PTR.*"; done;
 
 #сбор пользователей (обращение к контролеру домена)
 kerbrute userenum --dc 10.5.2.2 -d domain.ru /usr/share/seclists/Usernames/xato-net-10-million-usernames.txt
