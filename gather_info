@@ -1,3 +1,6 @@
+#c винды
+
+
 $sysvolPath = "\\$env:USERDNSDOMAIN\SYSVOL\$env:USERDNSDOMAIN"
 
 # 1. Search for all XML files (GPP settings)
@@ -186,6 +189,13 @@ nxc smb -u 'users' -p 'password' --pass-pol
 проверка Трастов (доверительных отношений в домене) Powershell
 ([System.DirectoryServices.ActiveDirectory.Domain]::GetCurrentDomain()).GetAllTrustRelationships()
 
+
+
+
+#С линукса
+
+#сбор живых хостов в домене
+nmap -sn -iL ips.txt -oG - | grep "Status: Up" | grep -v "()" > alive_with_hostname.txt
 
 # сбор DNS в домене
 сканируем udp 53 порт
