@@ -130,7 +130,9 @@ nxc smb -u 'users' -p 'password' --pass-pol
 sudo above --interface eth0 --timer 100
 # текущие учетные данные
 cmdkey /list
-
+#Об повышении привилегий в Windows 😎. Если вы знаете, что версия Windows уязвима к каким-либо эксплойтам, лучше узнать, а не запатчена ли система, перед тем как перекидывать на неё эксплойты для повышения привилегий. Можно посмотреть историю через GUI, но если у вас только shell, вот два варианта без исполнения стандартного systeminfo 💀:
+wmic qfe get Caption,HotFixID,Description,InstalledOn,InstalledBy
+Get-CimInstance -ClassName Win32_QuickFixEngineering | Select-Object Caption,HotFixID,Description,InstalledOn,InstalledBy
 
 
 
